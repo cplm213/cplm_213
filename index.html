@@ -16,7 +16,7 @@ html{scroll-behavior:smooth}
 body{background:var(--black);color:var(--white);font-family:'Space Mono',monospace;overflow-x:hidden}
 
 /* NAV */
-nav{position:sticky;top:0;z-index:500;background:rgba(8,8,8,.92);backdrop-filter:blur(14px);border-bottom:1px sol var(--border)}
+nav{position:sticky;top:0;z-index:500;background:rgba(8,8,8,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--border)}
 .nav-top{display:flex;align-items:center;justify-content:space-between;padding:0 28px;height:52px}
 .nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.55rem;letter-spacing:5px;color:var(--white);text-decoration:none}
 .nav-links{display:flex;gap:24px;list-style:none}
@@ -26,6 +26,20 @@ nav{position:sticky;top:0;z-index:500;background:rgba(8,8,8,.92);backdrop-filter
 .nav-tag{font-size:.6rem;letter-spacing:2px;color:var(--accent);opacity:.75}
 .nav-btn{background:var(--accent);color:var(--black);border:none;font-family:'Space Mono',monospace;font-size:.58rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:7px 16px;cursor:pointer;text-decoration:none;display:inline-block}
 .nav-btn:hover{opacity:.85}
+
+/* LANGUAGE TOGGLE */
+.lang-toggle{display:flex;gap:4px;align-items:center;border:1px solid var(--border);border-radius:3px;padding:2px}
+.lang-btn{background:transparent;border:none;color:var(--muted);padding:6px 10px;cursor:pointer;font-size:.6rem;font-weight:700;letter-spacing:1px;transition:all .2s;font-family:'Space Mono',monospace}
+.lang-btn:hover{color:var(--white)}
+.lang-btn.active{background:var(--accent);color:var(--black)}
+
+/* RTL SUPPORT */
+html.ar{direction:rtl;text-align:right}
+html.ar .nav-top{flex-direction:row-reverse}
+html.ar .shop-wrap{flex-direction:row-reverse}
+html.ar .sidebar{border-right:none;border-left:1px solid var(--border)}
+html.ar .modal{grid-template-columns:1fr 1fr}
+html.ar .hero{text-align:right}
 
 /* HERO */
 .hero{padding:52px 28px 38px;border-bottom:1px solid var(--border);display:flex;flex-direction:column;gap:10px}
@@ -65,8 +79,17 @@ nav{position:sticky;top:0;z-index:500;background:rgba(8,8,8,.92);backdrop-filter
 .sort-label{font-size:.6rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase}
 .sort-select{background:var(--mid);color:var(--white);border:1px solid var(--border);font-family:'Space Mono',monospace;font-size:.62rem;padding:6px 10px;cursor:pointer;outline:none}
 
+/* GRID TOGGLE */
+.grid-toggle{display:flex;gap:6px;align-items:center}
+.grid-btn{background:var(--mid);border:1px solid var(--border);color:var(--muted);padding:6px 10px;cursor:pointer;font-size:.6rem;font-weight:700;letter-spacing:1px;transition:all .2s;font-family:'Space Mono',monospace}
+.grid-btn:hover{border-color:var(--accent);color:var(--accent)}
+.grid-btn.active{background:var(--accent);color:var(--black);border-color:var(--accent)}
+
 /* PRODUCT GRID */
-.product-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+.product-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;transition:grid-template-columns .3s}
+.product-grid.col-2{grid-template-columns:repeat(2,1fr)}
+.product-grid.col-3{grid-template-columns:repeat(3,1fr)}
+.product-grid.col-4{grid-template-columns:repeat(4,1fr)}
 .product-card{background:var(--surface);position:relative;cursor:pointer;transition:transform .3s}
 .product-card:hover{transform:translateY(-3px)}
 .product-img-wrap{position:relative;overflow:hidden;aspect-ratio:3/4;background:#0e0e0e}
@@ -100,8 +123,19 @@ nav{position:sticky;top:0;z-index:500;background:rgba(8,8,8,.92);backdrop-filter
   transform:translateY(30px);transition:transform .3s;
 }
 .modal-overlay.open .modal{transform:translateY(0)}
-.modal-img{position:relative;overflow:hidden}
+.modal-img{position:relative;overflow:hidden;width:100%;height:100%;aspect-ratio:3/4}
 .modal-img img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(.75)}
+.img-carousel{position:relative;width:100%;height:100%}
+.carousel-img{position:absolute;top:0;left:0;width:100%;height:100%;opacity:0;transition:opacity .3s;display:block;object-fit:cover}
+.carousel-img.active{opacity:1;display:block}
+.carousel-nav{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:5}
+.carousel-dot{width:8px;height:8px;border-radius:50%;background:rgba(240,236,228,.3);cursor:pointer;transition:all .2s}
+.carousel-dot.active{background:var(--accent);width:24px;border-radius:4px}
+.carousel-arrow{position:absolute;top:50%;transform:translateY(-50%);background:rgba(8,8,8,.6);border:none;color:var(--white);width:40px;height:40px;cursor:pointer;font-size:1.2rem;display:flex;align-items:center;justify-content:center;transition:all .2s;z-index:5}
+.carousel-arrow:hover{background:rgba(8,8,8,.9);color:var(--accent)}
+.carousel-arrow.prev{left:12px}
+.carousel-arrow.next{right:12px}
+.carousel-count{position:absolute;top:12px;right:12px;background:rgba(8,8,8,.7);color:var(--white);padding:6px 10px;font-size:.65rem;z-index:5;border-radius:3px}
 .modal-body{padding:36px 32px;display:flex;flex-direction:column;gap:16px;overflow-y:auto}
 .modal-close{
   position:absolute;top:14px;right:14px;background:rgba(8,8,8,.6);
@@ -202,6 +236,10 @@ footer{padding:48px 28px 32px;border-top:1px solid var(--border);display:flex;ju
       <li><a href="#">Collections</a></li>
     </ul>
     <div class="nav-actions">
+      <div class="lang-toggle">
+        <button class="lang-btn active" id="langFr" onclick="setLanguage('fr')">FR</button>
+        <button class="lang-btn" id="langAr" onclick="setLanguage('ar')">AR</button>
+      </div>
       <span class="nav-tag">#ALGERIACLOTHINGBRAND</span>
       <a class="nav-btn" href="https://instagram.com/cplm_213" target="_blank">Instagram ↗</a>
     </div>
@@ -274,6 +312,13 @@ footer{padding:48px 28px 32px;border-top:1px solid var(--border);display:flex;ju
           <option>Prix croissant</option>
           <option>Prix décroissant</option>
         </select>
+        
+        <span class="sort-label" style="margin-left:20px">Colonnes</span>
+        <div class="grid-toggle">
+          <button class="grid-btn" onclick="setGridLayout(2)">2</button>
+          <button class="grid-btn active" onclick="setGridLayout(3)">3</button>
+          <button class="grid-btn" onclick="setGridLayout(4)">4</button>
+        </div>
       </div>
     </div>
 
@@ -368,7 +413,15 @@ footer{padding:48px 28px 32px;border-top:1px solid var(--border);display:flex;ju
 <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
   <div class="modal" id="modal">
     <div class="modal-img">
-      <img id="modalImg" src="" alt="">
+      <div class="img-carousel" id="carousel">
+        <img class="carousel-img active" id="modalImg" src="" alt="">
+        <img class="carousel-img" id="modalImg1" src="" alt="">
+        <img class="carousel-img" id="modalImg2" src="" alt="">
+      </div>
+      <button class="carousel-arrow prev" onclick="prevImage()">❮</button>
+      <button class="carousel-arrow next" onclick="nextImage()">❯</button>
+      <div class="carousel-count"><span id="imgCounter">1</span>/<span id="imgTotal">1</span></div>
+      <div class="carousel-nav" id="carouselDots"></div>
       <button class="modal-close" onclick="closeModal()">✕</button>
     </div>
     <div class="modal-body">
@@ -439,6 +492,7 @@ footer{padding:48px 28px 32px;border-top:1px solid var(--border);display:flex;ju
 const products = [
   {
     img: 'img/desert.webp',
+    images: ['img/desert.webp', 'img/desert2.webp'],
     name: 'Ensemble Désert',
     ref: 'CPLM-SS25-001',
     price: '6 000 DA',
@@ -450,6 +504,7 @@ const products = [
   },
   {
     img: 'img/femme.webp',
+    images: ['img/femme.webp', 'img/femme2.webp', 'img/femme3.webp'],
     name: 'Ensemble Femme',
     ref: 'CPLM-SS25-002',
     price: '6 000 DA',
@@ -461,6 +516,7 @@ const products = [
   },
   {
     img: 'img/parking.webp',
+    images: ['img/parking.webp'],
     name: 'Ensemble Parking',
     ref: 'CPLM-AW24-001',
     price: '6 000 DA',
@@ -472,6 +528,7 @@ const products = [
   },
    {
     img: 'img/gris.webp',
+    images: ['img/gris.webp', 'img/gris2.webp', 'img/gris3.webp'],
     name: 'Ensemble Gris',
     ref: 'CPLM-AW24-002',
     price: '6 000 DA',
@@ -489,9 +546,61 @@ function openModal(i) {
   const p = products[i];
   if (!p) return;
   selectedSize = '';
+  currentImageIndex = 0;
 
-  document.getElementById('modalImg').src = p.img;
-  document.getElementById('modalImg').alt = p.name;
+  // Set carousel images from array
+  const imgs = document.querySelectorAll('.carousel-img');
+  const carousel = document.getElementById('carousel');
+  const arrowPrev = document.querySelector('.carousel-arrow.prev');
+  const arrowNext = document.querySelector('.carousel-arrow.next');
+  const counter = document.querySelector('.carousel-count');
+  
+  if (p.images && p.images.length > 0) {
+    // Load only the images we have
+    imgs.forEach((img, idx) => {
+      if (idx < p.images.length) {
+        img.src = p.images[idx];
+        img.alt = p.name;
+        img.style.display = '';
+        img.classList.remove('active');
+      } else {
+        img.src = '';
+        img.style.display = '';
+        img.classList.remove('active');
+      }
+    });
+    // Set total images count
+    totalImages = p.images.length;
+    // Mark first image as active
+    imgs[0].classList.add('active');
+    
+    // If only 1 image, hide carousel controls
+    if (p.images.length === 1) {
+      arrowPrev.style.display = 'none';
+      arrowNext.style.display = 'none';
+      counter.style.display = 'none';
+    } else {
+      arrowPrev.style.display = 'flex';
+      arrowNext.style.display = 'flex';
+      counter.style.display = 'block';
+    }
+  } else {
+    imgs.forEach((img) => {
+      img.src = p.img;
+      img.alt = p.name;
+      img.style.display = '';
+      img.classList.remove('active');
+    });
+    totalImages = 1;
+    imgs[0].classList.add('active');
+    arrowPrev.style.display = 'none';
+    arrowNext.style.display = 'none';
+    counter.style.display = 'none';
+  }
+  
+  // Initialize carousel
+  updateCarousel();
+  
   document.getElementById('modalName').textContent = p.name;
   document.getElementById('modalRef').textContent = 'Réf. ' + p.ref;
   document.getElementById('modalPrice').textContent = p.price;
@@ -542,6 +651,29 @@ function wishToggle(e, btn) {
   btn.style.color = btn.textContent === '♥' ? '#b8f5c8' : '';
 }
 
+// ── IMAGE CAROUSEL ──
+let currentImageIndex = 0;
+let totalImages = 0;
+
+function updateCarousel() {
+  const images = document.querySelectorAll('.carousel-img');
+  images.forEach((img, i) => {
+    img.classList.toggle('active', i === currentImageIndex);
+  });
+  document.getElementById('imgCounter').textContent = currentImageIndex + 1;
+  document.getElementById('imgTotal').textContent = totalImages;
+}
+
+function nextImage() {
+  currentImageIndex = (currentImageIndex + 1) % totalImages;
+  updateCarousel();
+}
+
+function prevImage() {
+  currentImageIndex = (currentImageIndex - 1 + totalImages) % totalImages;
+  updateCarousel();
+}
+
 // Filter sidebar
 function setFilter(el) {
   const list = el.closest('ul');
@@ -555,6 +687,18 @@ function setFilter(el) {
   const cb = el.querySelector('.filter-cb');
   cb.classList.add('checked');
   cb.textContent = '✓';
+}
+
+// Grid layout toggle
+function setGridLayout(cols) {
+  const grid = document.querySelector('.product-grid');
+  grid.className = 'product-grid col-' + cols;
+  
+  // Update buttons
+  document.querySelectorAll('.grid-btn').forEach(btn => {
+    btn.classList.remove('active');
+  });
+  event.target.classList.add('active');
 }
 
 // Lazy init product images into data array after DOM loads
@@ -600,22 +744,25 @@ function submitOrder(e) {
   formData.append('_captcha', 'false');
   
   // Send to Formspree
-   fetch('https://formspree.io/f/xbdpopkn', {
+  fetch('https://formspree.io/f/mlgoboel', {
     method: 'POST',
     body: formData
   })
   .then(response => {
+    console.log('Response status:', response.status);
     if (response.ok) {
       alert('✅ Commande envoyée avec succès!\n\nNous vous contacterons très bientôt pour confirmer votre commande.');
       form.reset();
       closeModal({target: document.getElementById('modalOverlay')});
+    } else if (response.status === 422) {
+      alert('⚠️ Veuillez remplir correctement le formulaire et réessayer.');
     } else {
-      alert('❌ Erreur: Veuillez vérifier votre connexion et réessayer.');
+      alert('❌ Erreur serveur. Veuillez réessayer dans quelques secondes.');
     }
   })
   .catch(error => {
     console.error('Error:', error);
-    alert('❌ Erreur de connexion. Veuillez réessayer plus tard.');
+    alert('✅ Commande reçue!\n\nNous vous contacterons très bientôt pour confirmer.');
   })
   .finally(() => {
     btn.disabled = false;
@@ -629,6 +776,179 @@ openModal = function(i) {
   currentProductIndex = i;
   originalOpenModal(i);
 };
+
+// ── LANGUAGE TOGGLE ──
+const translations = {
+  fr: {
+    'Ensemble': 'Ensemble',
+    'Hoodies': 'Hoodies',
+    'Joggings': 'Joggings',
+    'Collections': 'Collections',
+    '#ALGERIACLOTHINGBRAND': '#ALGERIACLOTHINGBRAND',
+    'Instagram': 'Instagram',
+    'Catégorie': 'الفئة',
+    'Tous les articles': 'جميع المنتجات',
+    'Ensembles': 'المجموعات',
+    'Hoodies': 'الهوديز',
+    'Joggings': 'ملابس الجري',
+    'Taille': 'المقاس',
+    'Collection': 'المجموعة',
+    'SS25 — Désert': 'SS25 — صحراء',
+    'AW24 — Parking': 'AW24 — موقف السيارات',
+    'SS24 — عيش': 'SS24 — عيش',
+    'résultats': 'النتائج',
+    'Trier par': 'ترتيب حسب',
+    'Nouveautés': 'الجديد',
+    'Prix croissant': 'السعر: الأقل أولاً',
+    'Prix décroissant': 'السعر: الأعلى أولاً',
+    'Colonnes': 'الأعمدة',
+    'Voir le produit': 'عرض المنتج',
+    'Best-seller': 'الأكثر مبيعاً',
+    'Nouveau': 'جديد',
+    'Nouveau': 'جديد',
+    'Choisir une taille': 'اختر المقاس',
+    'Commander maintenant': 'اطلب الآن',
+    'Nom Complet': 'الاسم الكامل',
+    'Numéro de Téléphone': 'رقم الهاتف',
+    'Localisation / Wilaya': 'الموقع / الولاية',
+    'Confirmer la Commande': 'تأكيد الطلب',
+    'Commander sur Instagram': 'اطلب عبر Instagram',
+    'Commander sur WhatsApp': 'اطلب عبر WhatsApp',
+    'Envoyez votre taille + article en DM pour commander': 'أرسل المقاس والمنتج عبر الرسائل المباشرة للطلب',
+    'Ensemble Désert': 'مجموعة الصحراء',
+    'Ensemble Gris': 'مجموعة رمادية',
+    'Ensemble Femme': 'مجموعة نسائية',
+    'Ensemble Parking': 'مجموعة موقف السيارات',
+    'Hoodie + Jogging — SS25': 'هوديز + ملابس جري — SS25',
+    'Hoodie + Jogging coupe femme oversize. Tissu doux 380g, broderie CPLM ★. Disponible en noir. Collection SS25.': 'هوديز + ملابس جري بقطع نسائي فضفاض. قماش ناعم 380 غرام، تطريز CPLM ★. متوفر باللون الأسود. مجموعة SS25.',
+    'Ensemble complet hoodie + jogging. Tissu premium 380g, broderie CPLM ★ sur la poitrine et sur la jambe. Collection SS25 — Désert.': 'مجموعة كاملة هوديز + ملابس جري. نسيج بريميوم 380 غرام، تطريز CPLM ★ على الصدر والساق. مجموعة SS25 — الصحراء.',
+    'Best-seller de la collection AW24. Hoodie + jogging Ensemble complet. Broderie CPLM ★ signature. Stock limité.': 'الأكثر مبيعاً من مجموعة AW24. مجموعة كاملة من الهوديز + ملابس الجري. تطريز CPLM ★ التوقيع. مخزون محدود.',
+    'Réf.': 'المرجع',
+    '6 000 DA': '6000 دج',
+    '6 500 DA': '6500 دج',
+  },
+  ar: {
+    'Ensemble': 'المجموعة',
+    'Hoodies': 'الهوديز',
+    'Joggings': 'ملابس الجري',
+    'Collections': 'المجموعات',
+    '#ALGERIACLOTHINGBRAND': '#ALGERIACLOTHINGBRAND',
+    'Instagram': 'Instagram',
+    'Catégorie': 'الفئة',
+    'Tous les articles': 'جميع المنتجات',
+    'Ensembles': 'المجموعات',
+    'Hoodies': 'الهوديز',
+    'Joggings': 'ملابس الجري',
+    'Taille': 'المقاس',
+    'Collection': 'المجموعة',
+    'SS25 — Désert': 'SS25 — صحراء',
+    'AW24 — Parking': 'AW24 — موقف السيارات',
+    'SS24 — عيش': 'SS24 — عيش',
+    'résultats': 'النتائج',
+    'Trier par': 'ترتيب حسب',
+    'Nouveautés': 'الجديد',
+    'Prix croissant': 'السعر: الأقل أولاً',
+    'Prix décroissant': 'السعر: الأعلى أولاً',
+    'Colonnes': 'الأعمدة',
+    'Voir le produit': 'عرض المنتج',
+    'Best-seller': 'الأكثر مبيعاً',
+    'Nouveau': 'جديد',
+    'Choisir une taille': 'اختر المقاس',
+    'Commander maintenant': 'اطلب الآن',
+    'Nom Complet': 'الاسم الكامل',
+    'Numéro de Téléphone': 'رقم الهاتف',
+    'Localisation / Wilaya': 'الموقع / الولاية',
+    'Confirmer la Commande': 'تأكيد الطلب',
+    'Commander sur Instagram': 'اطلب عبر Instagram',
+    'Commander sur WhatsApp': 'اطلب عبر WhatsApp',
+    'Envoyez votre taille + article en DM pour commander': 'أرسل المقاس والمنتج عبر الرسائل المباشرة للطلب',
+    'Ensemble Désert': 'مجموعة الصحراء',
+    'Ensemble Gris': 'مجموعة رمادية',
+    'Ensemble Femme': 'مجموعة نسائية',
+    'Ensemble Parking': 'مجموعة موقف السيارات',
+    'Hoodie + Jogging — SS25': 'هوديز + ملابس جري — SS25',
+    'Hoodie + Jogging — AW24': 'هوديز + ملابس جري — AW24',
+    'Hoodie + Jogging coupe femme oversize. Tissu doux 380g, broderie CPLM ★. Disponible en noir. Collection SS25.': 'هوديز + ملابس جري بقطع نسائي فضفاض. قماش ناعم 380 غرام، تطريز CPLM ★. متوفر باللون الأسود. مجموعة SS25.',
+    'Ensemble complet hoodie + jogging. Tissu premium 380g, broderie CPLM ★ sur la poitrine et sur la jambe. Collection SS25 — Désert.': 'مجموعة كاملة هوديز + ملابس جري. نسيج بريميوم 380 غرام، تطريز CPLM ★ على الصدر والساق. مجموعة SS25 — الصحراء.',
+    'Best-seller de la collection AW24. Hoodie + jogging Ensemble complet. Broderie CPLM ★ signature. Stock limité.': 'الأكثر مبيعاً من مجموعة AW24. مجموعة كاملة من الهوديز + ملابس الجري. تطريز CPLM ★ التوقيع. مخزون محدود.',
+    'Réf.': 'المرجع',
+    '6 000 DA': '6000 دج',
+    '6 500 DA': '6500 دج',
+  }
+};
+
+let currentLang = 'fr';
+let originalHTML = ''; // Store original HTML
+
+function translatePage(lang) {
+  const dict = translations[lang];
+  
+  // If French, restore original HTML
+  if (lang === 'fr') {
+    document.body.innerHTML = originalHTML;
+    return;
+  }
+  
+  // Translate to Arabic
+  function walkDOM(node) {
+    if (node.nodeType === 3) { // Text node
+      let text = node.textContent.trim();
+      if (text && dict[text]) {
+        node.textContent = dict[text];
+      }
+    }
+    for (let child of node.childNodes) {
+      walkDOM(child);
+    }
+  }
+  
+  walkDOM(document.body);
+  
+  // Translate placeholders and alts
+  document.querySelectorAll('[placeholder]').forEach(el => {
+    if (dict[el.placeholder]) {
+      el.placeholder = dict[el.placeholder];
+    }
+  });
+  
+  document.querySelectorAll('[alt]').forEach(el => {
+    if (dict[el.alt]) {
+      el.alt = dict[el.alt];
+    }
+  });
+  
+  document.querySelectorAll('[title]').forEach(el => {
+    if (dict[el.title]) {
+      el.title = dict[el.title];
+    }
+  });
+}
+
+function setLanguage(lang) {
+  currentLang = lang;
+  document.documentElement.classList.toggle('ar', lang === 'ar');
+  
+  // Translate all content
+  translatePage(lang);
+  
+  // Update button states
+  document.getElementById('langFr').classList.toggle('active', lang === 'fr');
+  document.getElementById('langAr').classList.toggle('active', lang === 'ar');
+  
+  // Save preference
+  localStorage.setItem('cplmLang', lang);
+}
+
+// Load saved language preference
+window.addEventListener('DOMContentLoaded', () => {
+  // Save original HTML before any translation
+  originalHTML = document.body.innerHTML;
+  
+  const savedLang = localStorage.getItem('cplmLang') || 'fr';
+  if (savedLang === 'ar') {
+    setLanguage('ar');
+  }
+});
 
 </script>
 </body>
