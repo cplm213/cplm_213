@@ -600,7 +600,8 @@ function submitOrder(e) {
   formData.append('_captcha', 'false');
   
   // Send to Formspree
-  fetch('https://formspree.io/f/xbdpopkn', {
+   fetch('https://formspree.io/f/xbdpopkn', {
+    method: 'POST',
     body: formData
   })
   .then(response => {
