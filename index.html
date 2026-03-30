@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPLM — C'EST PAS LA MÊME</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --black:#080808;--surface:#111;--border:#222;
+  --white:#f0ece4;--muted:rgba(240,236,228,0.45);
+  --accent:#b8f5c8;--mid:#1a1a1a;
+}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--white);font-family:'Space Mono',monospace;overflow-x:hidden}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:500;background:rgba(8,8,8,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--border)}
+.nav-top{display:flex;align-items:center;justify-content:space-between;padding:0 28px;height:52px}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.55rem;letter-spacing:5px;color:var(--white);text-decoration:none}
+.nav-links{display:flex;gap:24px;list-style:none}
+.nav-links a{color:var(--muted);font-size:.62rem;letter-spacing:2.5px;text-transform:uppercase;text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--accent)}
+.nav-actions{display:flex;gap:12px;align-items:center}
+.nav-tag{font-size:.6rem;letter-spacing:2px;color:var(--accent);opacity:.75}
+.nav-btn{background:var(--accent);color:var(--black);border:none;font-family:'Space Mono',monospace;font-size:.58rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:7px 16px;cursor:pointer;text-decoration:none;display:inline-block}
+.nav-btn:hover{opacity:.85}
+
+/* HERO */
+.hero{padding:52px 28px 38px;border-bottom:1px solid var(--border);display:flex;flex-direction:column;gap:10px}
+.hero-eyebrow{font-size:.6rem;letter-spacing:4px;text-transform:uppercase;color:var(--accent)}
+.hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,8vw,6rem);letter-spacing:2px;line-height:.95}
+.hero-desc{font-size:.7rem;color:var(--muted);max-width:500px;line-height:1.9;margin-top:4px}
+
+/* MARQUEE */
+.marquee-wrap{border-top:1px solid var(--border);border-bottom:1px solid var(--border);overflow:hidden;padding:11px 0;background:var(--mid)}
+.marquee-track{display:flex;white-space:nowrap;animation:marquee 12s linear infinite}
+.marquee-item{font-family:'Bebas Neue',sans-serif;font-size:.95rem;letter-spacing:5px;padding:0 36px;color:rgba(240,236,228,.22)}
+.marquee-item.hi{color:var(--accent)}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* LAYOUT */
+.shop-wrap{display:flex;min-height:80vh}
+
+/* SIDEBAR */
+.sidebar{width:230px;flex-shrink:0;border-right:1px solid var(--border);padding:28px 0;position:sticky;top:52px;height:calc(100vh - 52px);overflow-y:auto}
+.sidebar-section{border-bottom:1px solid var(--border);padding:18px 22px}
+.sidebar-title{font-size:.6rem;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;user-select:none}
+.sidebar-title::after{content:'+';font-size:.85rem}
+.sidebar-title.open::after{content:'−'}
+.filter-list{list-style:none;display:flex;flex-direction:column;gap:10px}
+.filter-list li{font-size:.68rem;color:var(--muted);cursor:pointer;display:flex;align-items:center;gap:10px;transition:color .2s}
+.filter-list li:hover{color:var(--white)}
+.filter-list li.active{color:var(--accent)}
+.filter-cb{width:13px;height:13px;border:1px solid var(--border);background:transparent;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.5rem}
+.filter-cb.checked{background:var(--accent);border-color:var(--accent);color:var(--black)}
+
+/* MAIN */
+.main{flex:1;padding:24px 28px}
+.sort-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.result-count{font-size:.65rem;color:var(--muted)}
+.result-count span{color:var(--white)}
+.sort-controls{display:flex;align-items:center;gap:10px}
+.sort-label{font-size:.6rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase}
+.sort-select{background:var(--mid);color:var(--white);border:1px solid var(--border);font-family:'Space Mono',monospace;font-size:.62rem;padding:6px 10px;cursor:pointer;outline:none}
+
+/* PRODUCT GRID */
+.product-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+.product-card{background:var(--surface);position:relative;cursor:pointer;transition:transform .3s}
+.product-card:hover{transform:translateY(-3px)}
+.product-img-wrap{position:relative;overflow:hidden;aspect-ratio:3/4;background:#0e0e0e}
+.product-img-wrap img{width:100%;height:100%;object-fit:cover;filter:saturate(.65) brightness(.9);transition:transform .5s ease,filter .35s;display:block}
+.product-card:hover .product-img-wrap img{transform:scale(1.04);filter:saturate(.9) brightness(.95)}
+.product-badge{position:absolute;top:12px;left:12px;background:var(--accent);color:var(--black);font-size:.52rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:3px 8px}
+.product-wish{position:absolute;top:10px;right:10px;width:32px;height:32px;background:rgba(8,8,8,.55);backdrop-filter:blur(4px);border:none;cursor:pointer;color:var(--muted);font-size:.9rem;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s}
+.product-card:hover .product-wish{opacity:1}
+.product-info{padding:14px 14px 18px}
+.product-colors{display:flex;gap:5px;margin-bottom:8px}
+.color-dot{width:10px;height:10px;border-radius:50%;border:1px solid var(--border)}
+.product-name{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:2px;margin-bottom:2px;line-height:1.1}
+.product-sub{font-size:.6rem;color:var(--muted);margin-bottom:8px;letter-spacing:1px}
+.product-price{font-size:.75rem;font-weight:700;color:var(--accent);letter-spacing:2px}
+.product-price-old{font-size:.65rem;color:var(--muted);text-decoration:line-through;margin-left:8px}
+.quick-add{position:absolute;bottom:0;left:0;right:0;background:var(--accent);color:var(--black);text-align:center;font-size:.6rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;padding:10px;transform:translateY(100%);transition:transform .25s ease}
+.product-card:hover .quick-add{transform:translateY(0)}
+
+/* ── MODAL ── */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:900;
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .25s;
+  padding:20px;
+}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{
+  background:var(--surface);border:1px solid var(--border);
+  display:grid;grid-template-columns:1fr 1fr;
+  max-width:860px;width:100%;max-height:90vh;overflow-y:auto;
+  transform:translateY(30px);transition:transform .3s;
+}
+.modal-overlay.open .modal{transform:translateY(0)}
+.modal-img{position:relative;overflow:hidden}
+.modal-img img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(.75)}
+.modal-body{padding:36px 32px;display:flex;flex-direction:column;gap:16px;overflow-y:auto}
+.modal-close{
+  position:absolute;top:14px;right:14px;background:rgba(8,8,8,.6);
+  border:none;color:var(--white);font-size:1.2rem;width:36px;height:36px;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10;
+}
+.modal-brand{font-size:.58rem;letter-spacing:4px;text-transform:uppercase;color:var(--accent)}
+.modal-name{font-family:'Bebas Neue',sans-serif;font-size:2.4rem;letter-spacing:2px;line-height:1}
+.modal-ref{font-size:.58rem;color:var(--muted);letter-spacing:2px}
+.modal-price-wrap{display:flex;align-items:baseline;gap:10px}
+.modal-price{font-size:1.1rem;font-weight:700;color:var(--accent);letter-spacing:2px}
+.modal-price-old{font-size:.75rem;color:var(--muted);text-decoration:line-through}
+.modal-divider{border:none;border-top:1px solid var(--border)}
+.modal-section-label{font-size:.58rem;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.size-grid{display:flex;gap:8px;flex-wrap:wrap}
+.size-btn{
+  border:1px solid var(--border);background:transparent;color:var(--muted);
+  font-family:'Space Mono',monospace;font-size:.65rem;letter-spacing:1px;
+  padding:8px 14px;cursor:pointer;transition:all .15s;
+}
+.size-btn:hover{border-color:var(--white);color:var(--white)}
+.size-btn.selected{border-color:var(--accent);color:var(--accent);background:rgba(184,245,200,.08)}
+.size-btn:disabled{opacity:.3;cursor:not-allowed}
+.modal-desc{font-size:.68rem;color:var(--muted);line-height:1.9}
+.modal-cta-wrap{display:flex;flex-direction:column;gap:10px;margin-top:auto}
+.modal-cta{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  padding:14px;font-family:'Space Mono',monospace;font-size:.65rem;
+  font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  text-decoration:none;border:none;cursor:pointer;transition:opacity .2s;
+}
+.modal-cta:hover{opacity:.85}
+.cta-ig{background:var(--accent);color:var(--black)}
+.cta-wa{background:#25D366;color:#000}
+.modal-note{font-size:.55rem;color:var(--muted);text-align:center;letter-spacing:1px}
+
+/* CHECKOUT FORM */
+.checkout-form{display:flex;flex-direction:column;gap:12px;margin-top:auto}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-label{font-size:.58rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+.form-input{
+  background:var(--mid);border:1px solid var(--border);color:var(--white);
+  font-family:'Space Mono',monospace;font-size:.65rem;padding:10px 12px;
+  outline:none;transition:border-color .2s;border-radius:3px;
+}
+.form-input:focus{border-color:var(--accent)}
+.checkout-btn{
+  background:var(--accent);color:var(--black);border:none;font-family:'Space Mono',monospace;
+  font-size:.65rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  padding:12px;cursor:pointer;transition:opacity .2s;border-radius:3px;margin-top:8px;
+}
+.checkout-btn:hover{opacity:.85}
+.checkout-btn:disabled{opacity:.5;cursor:not-allowed}
+
+/* FEATURED */
+.featured-row{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-top:2px}
+.featured-card{position:relative;overflow:hidden;cursor:pointer;aspect-ratio:16/9;background:#0e0e0e}
+.featured-card img{width:100%;height:100%;object-fit:cover;filter:saturate(.55) brightness(.75);transition:transform .5s,filter .35s;display:block}
+.featured-card:hover img{transform:scale(1.04);filter:saturate(.8) brightness(.85)}
+.featured-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(8,8,8,.85) 0%,transparent 60%);display:flex;flex-direction:column;justify-content:flex-end;padding:24px}
+.featured-label{font-size:.58rem;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:6px}
+.featured-title{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:3px;line-height:1}
+
+/* FOOTER */
+footer{padding:48px 28px 32px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;margin-top:40px}
+.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;letter-spacing:5px;color:rgba(240,236,228,.12)}
+.footer-links{display:flex;gap:24px;list-style:none}
+.footer-links a{color:var(--muted);font-size:.6rem;letter-spacing:2px;text-transform:uppercase;text-decoration:none;transition:color .2s}
+.footer-links a:hover{color:var(--accent)}
+.footer-copy{width:100%;text-align:center;font-size:.55rem;color:rgba(240,236,228,.18);letter-spacing:2px}
+
+/* MOBILE */
+@media(max-width:900px){
+  .sidebar{display:none}
+  .product-grid{grid-template-columns:repeat(2,1fr)}
+  .featured-row{grid-template-columns:1fr}
+  .modal{grid-template-columns:1fr}
+  .modal-img{max-height:300px}
+}
+@media(max-width:600px){
+  .nav-links,.nav-tag{display:none}
+  .product-grid{grid-template-columns:1fr 1fr}
+  .hero,.main{padding-left:16px;padding-right:16px}
+  .modal-body{padding:22px 18px}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-top">
+    <a href="#" class="nav-logo">CPLM</a>
+    <ul class="nav-links">
+      <li><a href="#">Ensemble</a></li>
+      <li><a href="#">Hoodies</a></li>
+      <li><a href="#">Joggings</a></li>
+      <li><a href="#">Collections</a></li>
+    </ul>
+    <div class="nav-actions">
+      <span class="nav-tag">#ALGERIACLOTHINGBRAND</span>
+      <a class="nav-btn" href="https://instagram.com/cplm_213" target="_blank">Instagram ↗</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <p class="hero-eyebrow">Collection Printemps / Été 2025</p>
+  <h1>C'est pas<br>la même.</h1>
+  <p class="hero-desc">Streetwear algérien — fait différemment. Des pièces pour ceux qui bougent autrement. Qualité. Identité. 213.</p>
+</div>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item">C'EST PAS LA MÊME</span><span class="marquee-item hi">★</span>
+    <span class="marquee-item">ALGÉRIE CLOTHING BRAND</span><span class="marquee-item hi">★</span>
+    <span class="marquee-item">CPLM 213</span><span class="marquee-item hi">★</span>
+    <span class="marquee-item">عيش حياتك</span><span class="marquee-item hi">★</span>
+    <span class="marquee-item">C'EST PAS LA MÊME</span><span class="marquee-item hi">★</span>
+    <span class="marquee-item">ALGÉRIE CLOTHING BRAND</span><span class="marquee-item hi">★</span>
+    <span class="marquee-item">CPLM 213</span><span class="marquee-item hi">★</span>
+    <span class="marquee-item">عيش حياتك</span><span class="marquee-item hi">★</span>
+  </div>
+</div>
+
+<!-- SHOP -->
+<div class="shop-wrap">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title open" onclick="this.classList.toggle('open')">Catégorie</div>
+      <ul class="filter-list">
+        <li class="active" onclick="setFilter(this)"><div class="filter-cb checked">✓</div>Tous les articles</li>
+        <li onclick="setFilter(this)"><div class="filter-cb"></div>Ensembles</li>
+        <li onclick="setFilter(this)"><div class="filter-cb"></div>Hoodies</li>
+        <li onclick="setFilter(this)"><div class="filter-cb"></div>Joggings</li>
+      </ul>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title open" onclick="this.classList.toggle('open')">Taille</div>
+      <ul class="filter-list">
+        <li onclick="setFilter(this)"><div class="filter-cb"></div>S</li>
+        <li onclick="setFilter(this)"><div class="filter-cb"></div>M</li>
+        <li onclick="setFilter(this)"><div class="filter-cb"></div>L</li>
+        <li onclick="setFilter(this)"><div class="filter-cb"></div>XL</li>
+        <li onclick="setFilter(this)"><div class="filter-cb"></div>XXL</li>
+      </ul>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title open" onclick="this.classList.toggle('open')">Collection</div>
+      <ul class="filter-list">
+        <li onclick="setFilter(this)"><div class="filter-cb"></div>SS25 — Désert</li>
+        <li onclick="setFilter(this)"><div class="filter-cb"></div>AW24 — Parking</li>
+        <li onclick="setFilter(this)"><div class="filter-cb"></div>SS24 — عيش</li>
+      </ul>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="sort-bar">
+      <p class="result-count"><span>3</span> résultats</p>
+      <div class="sort-controls">
+        <span class="sort-label">Trier par</span>
+        <select class="sort-select">
+          <option>Nouveautés</option>
+          <option>Prix croissant</option>
+          <option>Prix décroissant</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- PRODUCT GRID -->
+    <div class="product-grid">
+
+      <div class="product-card" onclick="openModal(0)">
+        <div class="product-img-wrap">
+          <img src="img/desert.webp" alt="Ensemble Désert">
+          <span class="product-badge">Nouveau</span>
+          <button class="product-wish" onclick="wishToggle(event,this)" title="Favoris">♡</button>
+          <div class="quick-add">Voir le produit →</div>
+        </div>
+        <div class="product-info">
+          <div class="product-colors"><div class="color-dot" style="background:#1a1a1a"></div></div>
+          <div class="product-name">Ensemble Désert</div>
+          <div class="product-sub">Hoodie + Jogging — SS25</div>
+          <span class="product-price">6 000 DA</span>
+        </div>
+      </div>
+
+      <div class="product-card" onclick="openModal(1)">
+        <div class="product-img-wrap">
+          <img src="img/femme.webp" alt="Ensemble Femme">
+          <button class="product-wish" onclick="wishToggle(event,this)" title="Favoris">♡</button>
+          <div class="quick-add">Voir le produit →</div>
+        </div>
+        <div class="product-info">
+          <div class="product-colors"><div class="color-dot" style="background:#1a1a1a"></div></div>
+          <div class="product-name">Ensemble Femme</div>
+          <div class="product-sub">Hoodie + Jogging — SS25</div>
+          <span class="product-price">6 000 DA</span>
+        </div>
+      </div>
+
+      <div class="product-card" onclick="openModal(2)">
+        <div class="product-img-wrap">
+          <img src="img/parking.webp" alt="Ensemble Parking">
+          <span class="product-badge">Best-seller</span>
+          <button class="product-wish" onclick="wishToggle(event,this)" title="Favoris">♡</button>
+          <div class="quick-add">Voir le produit →</div>
+        </div>
+        <div class="product-info">
+          <div class="product-colors"><div class="color-dot" style="background:#1a1a1a"></div></div>
+          <div class="product-name">Ensemble Parking</div>
+          <div class="product-sub">Hoodie + Jogging — AW24</div>
+          <span class="product-price">6 000 DA</span>
+          <span class="product-price-old">6 500 DA</span>
+        </div>
+      </div>
+
+      <div class="product-card" onclick="openModal(3)">
+        <div class="product-img-wrap">
+          <img src="img/gris.webp" alt="Ensemble Gris">
+          <span class="product-badge">Nouveau</span>
+          <button class="product-wish" onclick="wishToggle(event,this)" title="Favoris">♡</button>
+          <div class="quick-add">Voir le produit →</div>
+        </div>
+        <div class="product-info">
+          <div class="product-colors"><div class="color-dot" style="background:#1a1a1a"></div></div>
+          <div class="product-name">Ensemble Gris</div>
+          <div class="product-sub">Hoodie + Jogging — AW24</div>
+          <span class="product-price">6 000 DA</span>
+          <span class="product-price-old">6 500 DA</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- FEATURED -->
+    <div class="featured-row">
+      <div class="featured-card" onclick="openModal(0)">
+        <img src="img/featured-desert.webp" alt="Collection Désert">
+        <div class="featured-overlay">
+          <p class="featured-label">Collection SS25</p>
+          <p class="featured-title">L'edit Désert</p>
+        </div>
+      </div>
+      <div class="featured-card" onclick="openModal(1)">
+        <img src="img/featured-femme.webp" alt="Collection Femme">
+        <div class="featured-overlay">
+          <p class="featured-label">Femme</p>
+          <p class="featured-title">عيش حياتك</p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal" id="modal">
+    <div class="modal-img">
+      <img id="modalImg" src="" alt="">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div>
+        <p class="modal-brand">CPLM — Algeria Clothing Brand</p>
+        <h2 class="modal-name" id="modalName"></h2>
+        <p class="modal-ref" id="modalRef"></p>
+      </div>
+      <div class="modal-price-wrap">
+        <span class="modal-price" id="modalPrice"></span>
+        <span class="modal-price-old" id="modalOldPrice"></span>
+      </div>
+      <hr class="modal-divider">
+      <div>
+        <p class="modal-section-label">Choisir une taille</p>
+        <div class="size-grid" id="sizeGrid"></div>
+      </div>
+      <hr class="modal-divider">
+      <p class="modal-desc" id="modalDesc"></p>
+      
+      <hr class="modal-divider">
+      <p class="modal-section-label">Commander maintenant</p>
+      <form class="checkout-form" id="checkoutForm" onsubmit="submitOrder(event)">
+        <div class="form-group">
+          <label class="form-label">Nom Complet</label>
+          <input type="text" class="form-input" name="customer_name" required placeholder="Ex: Ahmed Benali">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Numéro de Téléphone</label>
+          <input type="tel" class="form-input" name="phone_number" required placeholder="Ex: +213 7XX XXX XXX">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Localisation / Wilaya</label>
+          <input type="text" class="form-input" name="location" required placeholder="Ex: Alger, Oran, etc...">
+        </div>
+        <button type="submit" class="checkout-btn" id="checkoutBtn">Confirmer la Commande</button>
+      </form>
+      
+      <hr class="modal-divider">
+      <div class="modal-cta-wrap">
+        <a class="modal-cta cta-ig" id="ctaIG" href="#" target="_blank">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          Commander sur Instagram
+        </a>
+        <a class="modal-cta cta-wa" id="ctaWA" href="#" target="_blank">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.126 1.533 5.854L.072 23.928l6.228-1.63A11.944 11.944 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.891 0-3.655-.523-5.16-1.43l-.37-.219-3.696.969.985-3.598-.241-.37A9.956 9.956 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+          Commander sur WhatsApp
+        </a>
+        <p class="modal-note">Envoyez votre taille + article en DM pour commander</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-logo">CPLM</span>
+  <ul class="footer-links">
+    <li><a href="https://instagram.com/cplm_213" target="_blank">Instagram</a></li>
+    <li><a href="https://vt.tiktok.com/ZSDbp6JPC/" target="_blank">TikTok</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+  <p class="footer-copy">© 2025 CPLM — C'est Pas La Même. Algérie.</p>
+</footer>
+
+<script>
+// ── PRODUCT DATA ──
+const products = [
+  {
+    img: 'img/desert.webp',
+    name: 'Ensemble Désert',
+    ref: 'CPLM-SS25-001',
+    price: '6 000 DA',
+    oldPrice: '',
+    sizes: ['S','M','L','XL','XXL'],
+    desc: 'Ensemble complet hoodie + jogging. Tissu premium 380g, broderie CPLM ★ sur la poitrine et sur la jambe. Collection SS25 — Désert.',
+    ig: 'https://www.instagram.com/cplm_213/p/DT_FSOqijbb/',
+    wa: 'https://wa.me/213000000000?text=Salam%2C%20je%20veux%20commander%20l\'Ensemble%20D%C3%A9sert%20CPLM%20SS25'
+  },
+  {
+    img: 'img/femme.webp',
+    name: 'Ensemble Femme',
+    ref: 'CPLM-SS25-002',
+    price: '6 000 DA',
+    oldPrice: '',
+    sizes: ['XS','S','M','L','XL'],
+    desc: 'Ensemble hoodie + jogging coupe femme oversize. Tissu doux 380g, broderie CPLM ★. Disponible en noir. Collection SS25.',
+    ig: 'https://www.instagram.com/cplm_213/reel/DSr1aknDJui/',
+    wa: 'https://wa.me/213000000000?text=Salam%2C%20je%20veux%20commander%20l\'Ensemble%20Femme%20CPLM%20SS25'
+  },
+  {
+    img: 'img/parking.webp',
+    name: 'Ensemble Parking',
+    ref: 'CPLM-AW24-001',
+    price: '6 000 DA',
+    oldPrice: '6 500 DA',
+    sizes: ['S','M','L','XL','XXL'],
+    desc: 'Best-seller de la collection AW24. Hoodie + jogging Ensemble complet. Broderie CPLM ★ signature. Stock limité.',
+    ig: 'https://www.instagram.com/cplm_213/p/DSvFBR_CsLu/',
+    wa: 'https://wa.me/213000000000?text=Salam%2C%20je%20veux%20commander%20l\'Ensemble%20Parking%20CPLM%20AW24'
+  },
+   {
+    img: 'img/gris.webp',
+    name: 'Ensemble Gris',
+    ref: 'CPLM-AW24-002',
+    price: '6 000 DA',
+    oldPrice: '6 500 DA',
+    sizes: ['S','M','L','XL','XXL'],
+    desc: 'Best-seller de la collection AW24. Hoodie + jogging Ensemble complet. Broderie CPLM ★ signature. Stock limité.',
+    ig: 'https://www.instagram.com/cplm_213/p/DUqxL30Ct_e/',
+    wa: 'https://wa.me/213000000000?text=Salam%2C%20je%20veux%20commander%20l\'Ensemble%20Gris%20CPLM%20AW24'
+  }
+];
+
+let selectedSize = '';
+
+function openModal(i) {
+  const p = products[i];
+  if (!p) return;
+  selectedSize = '';
+
+  document.getElementById('modalImg').src = p.img;
+  document.getElementById('modalImg').alt = p.name;
+  document.getElementById('modalName').textContent = p.name;
+  document.getElementById('modalRef').textContent = 'Réf. ' + p.ref;
+  document.getElementById('modalPrice').textContent = p.price;
+  document.getElementById('modalOldPrice').textContent = p.oldPrice;
+  document.getElementById('modalDesc').textContent = p.desc;
+
+  // sizes
+  const grid = document.getElementById('sizeGrid');
+  grid.innerHTML = '';
+  p.sizes.forEach(s => {
+    const btn = document.createElement('button');
+    btn.className = 'size-btn';
+    btn.textContent = s;
+    btn.onclick = () => {
+      grid.querySelectorAll('.size-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      selectedSize = s;
+      updateLinks(p, s);
+    };
+    grid.appendChild(btn);
+  });
+
+  document.getElementById('ctaIG').href = p.ig;
+  document.getElementById('ctaWA').href = p.wa;
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function updateLinks(p, size) {
+  const igMsg = encodeURIComponent('Salam, je veux commander : ' + p.name + ' — Taille ' + size);
+  const waMsg = encodeURIComponent('Salam, je veux commander : ' + p.name + ' — Taille ' + size);
+  document.getElementById('ctaIG').href = p.ig;
+  document.getElementById('ctaWA').href = 'https://wa.me/213000000000?text=' + waMsg;
+}
+
+function closeModal(e) {
+  if (e && e.target !== document.getElementById('modalOverlay') && !e.target.classList.contains('modal-close')) return;
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal({target: document.getElementById('modalOverlay')}); });
+
+// Wishlist
+function wishToggle(e, btn) {
+  e.stopPropagation();
+  btn.textContent = btn.textContent === '♡' ? '♥' : '♡';
+  btn.style.color = btn.textContent === '♥' ? '#b8f5c8' : '';
+}
+
+// Filter sidebar
+function setFilter(el) {
+  const list = el.closest('ul');
+  list.querySelectorAll('li').forEach(li => {
+    li.classList.remove('active');
+    const cb = li.querySelector('.filter-cb');
+    cb.classList.remove('checked');
+    cb.textContent = '';
+  });
+  el.classList.add('active');
+  const cb = el.querySelector('.filter-cb');
+  cb.classList.add('checked');
+  cb.textContent = '✓';
+}
+
+// Lazy init product images into data array after DOM loads
+window.addEventListener('DOMContentLoaded', () => {
+  const imgs = document.querySelectorAll('.product-card img');
+  imgs.forEach((img, i) => { if (products[i]) products[i].img = img.src; });
+});
+
+// Checkout form submission - Using Formspree for GitHub Pages
+let currentProductIndex = null;
+
+function submitOrder(e) {
+  e.preventDefault();
+  
+  const form = e.target;
+  const customerName = form.elements['customer_name'].value;
+  const phoneNumber = form.elements['phone_number'].value;
+  const location = form.elements['location'].value;
+  
+  if (!selectedSize) {
+    alert('Veuillez sélectionner une taille');
+    return;
+  }
+  
+  const product = products[currentProductIndex];
+  if (!product) {
+    alert('Erreur: produit non trouvé');
+    return;
+  }
+  
+  const btn = document.getElementById('checkoutBtn');
+  btn.disabled = true;
+  btn.textContent = 'En cours...';
+  
+  // Use FormData for Formspree
+  const formData = new FormData();
+  formData.append('product_name', product.name);
+  formData.append('customer_name', customerName);
+  formData.append('phone_number', phoneNumber);
+  formData.append('location', location);
+  formData.append('size', selectedSize);
+  formData.append('_subject', 'Nouvelle Commande CPLM - ' + product.name);
+  formData.append('_captcha', 'false');
+  
+  // Send to Formspree
+  fetch('https://formspree.io/f/mlgoboel', {
+    method: 'POST',
+    body: formData
+  })
+  .then(response => {
+    if (response.ok) {
+      alert('✅ Commande envoyée avec succès!\n\nNous vous contacterons très bientôt pour confirmer votre commande.');
+      form.reset();
+      closeModal({target: document.getElementById('modalOverlay')});
+    } else {
+      alert('❌ Erreur: Veuillez vérifier votre connexion et réessayer.');
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    alert('❌ Erreur de connexion. Veuillez réessayer plus tard.');
+  })
+  .finally(() => {
+    btn.disabled = false;
+    btn.textContent = 'Confirmer la Commande';
+  });
+}
+
+// Store current product index when opening modal
+const originalOpenModal = openModal;
+openModal = function(i) {
+  currentProductIndex = i;
+  originalOpenModal(i);
+};
+
+</script>
+</body>
+</html>
+ 
