@@ -42,10 +42,13 @@ html.ar .modal{grid-template-columns:1fr 1fr}
 html.ar .hero{text-align:right}
 
 /* HERO */
-.hero{padding:52px 28px 38px;border-bottom:1px solid var(--border);display:flex;flex-direction:column;gap:10px}
+.hero{padding:52px 28px 38px;border-bottom:1px solid var(--border);display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+.hero-content{display:flex;flex-direction:column;gap:10px}
 .hero-eyebrow{font-size:.6rem;letter-spacing:4px;text-transform:uppercase;color:var(--accent)}
 .hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,8vw,6rem);letter-spacing:2px;line-height:.95}
 .hero-desc{font-size:.7rem;color:var(--muted);max-width:500px;line-height:1.9;margin-top:4px}
+.hero-video{position:relative;overflow:hidden;aspect-ratio:16/9;background:#000;border:1px solid var(--border)}
+.promo-video{width:100%;height:100%;object-fit:cover;display:block}
 
 /* MARQUEE */
 .marquee-wrap{border-top:1px solid var(--border);border-bottom:1px solid var(--border);overflow:hidden;padding:11px 0;background:var(--mid)}
@@ -214,12 +217,15 @@ footer{padding:48px 28px 32px;border-top:1px solid var(--border);display:flex;ju
   .featured-row{grid-template-columns:1fr}
   .modal{grid-template-columns:1fr}
   .modal-img{max-height:300px}
+  .hero{grid-template-columns:1fr;gap:28px}
 }
 @media(max-width:600px){
   .nav-links,.nav-tag{display:none}
   .product-grid{grid-template-columns:1fr 1fr}
   .hero,.main{padding-left:16px;padding-right:16px}
   .modal-body{padding:22px 18px}
+  .hero{gap:20px;padding:40px 16px 30px}
+  .hero-video{aspect-ratio:16/9}
 }
 </style>
 </head>
@@ -248,9 +254,17 @@ footer{padding:48px 28px 32px;border-top:1px solid var(--border);display:flex;ju
 
 <!-- HERO -->
 <div class="hero">
-  <p class="hero-eyebrow">Collection Printemps / Été 2025</p>
-  <h1>C'est pas<br>la même.</h1>
-  <p class="hero-desc">Streetwear algérien — fait différemment. Des pièces pour ceux qui bougent autrement. Qualité. Identité. 213.</p>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Collection Printemps / Été 2025</p>
+    <h1>C'est pas<br>la même.</h1>
+    <p class="hero-desc">Streetwear algérien — fait différemment. Des pièces pour ceux qui bougent autrement. Qualité. Identité. 213.</p>
+  </div>
+  <div class="hero-video">
+    <video class="promo-video" width="100%" height="auto" autoplay muted loop playsinline>
+      <source src="img/promo.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  </div>
 </div>
 
 <!-- MARQUEE -->
@@ -304,7 +318,7 @@ footer{padding:48px 28px 32px;border-top:1px solid var(--border);display:flex;ju
   <!-- MAIN -->
   <main class="main">
     <div class="sort-bar">
-      <p class="result-count"><span>3</span> résultats</p>
+      <p class="result-count"><span>2</span> résultats</p>
       <div class="sort-controls">
         <span class="sort-label">Trier par</span>
         <select class="sort-select">
@@ -355,22 +369,6 @@ footer{padding:48px 28px 32px;border-top:1px solid var(--border);display:flex;ju
       </div>
 
       <div class="product-card" onclick="openModal(2)">
-        <div class="product-img-wrap">
-          <img src="img/parking.webp" alt="Ensemble Parking">
-          <span class="product-badge">Best-seller</span>
-          <button class="product-wish" onclick="wishToggle(event,this)" title="Favoris">♡</button>
-          <div class="quick-add">Voir le produit →</div>
-        </div>
-        <div class="product-info">
-          <div class="product-colors"><div class="color-dot" style="background:#1a1a1a"></div></div>
-          <div class="product-name">Ensemble Parking</div>
-          <div class="product-sub">Hoodie + Jogging — AW24</div>
-          <span class="product-price">6 000 DA</span>
-          <span class="product-price-old">6 500 DA</span>
-        </div>
-      </div>
-
-      <div class="product-card" onclick="openModal(3)">
         <div class="product-img-wrap">
           <img src="img/gris.webp" alt="Ensemble Gris">
           <span class="product-badge">Nouveau</span>
@@ -513,18 +511,6 @@ const products = [
     desc: 'Ensemble hoodie + jogging coupe femme oversize. Tissu doux 380g, broderie CPLM ★. Disponible en noir. Collection SS25.',
     ig: 'https://www.instagram.com/cplm_213/reel/DSr1aknDJui/',
     wa: 'https://wa.me/213000000000?text=Salam%2C%20je%20veux%20commander%20l\'Ensemble%20Femme%20CPLM%20SS25'
-  },
-  {
-    img: 'img/parking.webp',
-    images: ['img/parking.webp'],
-    name: 'Ensemble Parking',
-    ref: 'CPLM-AW24-001',
-    price: '6 000 DA',
-    oldPrice: '6 500 DA',
-    sizes: ['S','M','L','XL','XXL'],
-    desc: 'Best-seller de la collection AW24. Hoodie + jogging Ensemble complet. Broderie CPLM ★ signature. Stock limité.',
-    ig: 'https://www.instagram.com/cplm_213/p/DSvFBR_CsLu/',
-    wa: 'https://wa.me/213000000000?text=Salam%2C%20je%20veux%20commander%20l\'Ensemble%20Parking%20CPLM%20AW24'
   },
    {
     img: 'img/gris.webp',
@@ -818,7 +804,6 @@ const translations = {
     'Ensemble Désert': 'Ensemble Désert',
     'Ensemble Gris': 'Ensemble Gris',
     'Ensemble Femme': 'Ensemble Femme',
-    'Ensemble Parking': 'Ensemble Parking',
     'Hoodie + Jogging — SS25': 'Hoodie + Jogging — SS25',
     'Hoodie + Jogging — AW24': 'Hoodie + Jogging — AW24',
     'Hoodie + Jogging coupe femme oversize. Tissu doux 380g, broderie CPLM ★. Disponible en noir. Collection SS25.': 'Hoodie + Jogging coupe femme oversize. Tissu doux 380g, broderie CPLM ★. Disponible en noir. Collection SS25.',
@@ -869,7 +854,6 @@ const translations = {
     'Ensemble Désert': 'مجموعة الصحراء',
     'Ensemble Gris': 'مجموعة رمادية',
     'Ensemble Femme': 'مجموعة نسائية',
-    'Ensemble Parking': 'مجموعة موقف السيارات',
     'Hoodie + Jogging — SS25': 'هوديز + ملابس جري — SS25',
     'Hoodie + Jogging — AW24': 'هوديز + ملابس جري — AW24',
     'Hoodie + Jogging coupe femme oversize. Tissu doux 380g, broderie CPLM ★. Disponible en noir. Collection SS25.': 'هوديز + ملابس جري بقطع نسائي فضفاض. قماش ناعم 380 غرام، تطريز CPLM ★. متوفر باللون الأسود. مجموعة SS25.',
